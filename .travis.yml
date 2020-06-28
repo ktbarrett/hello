@@ -1,0 +1,25 @@
+dist: bionic
+
+# prevents local branches other than master from causing Travis to run
+branches:
+  only:
+    - master
+
+language: python
+
+# run tests in isolated environment which each supported Python version
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9-dev"
+
+# we must first install tox
+install:
+  - pip install tox
+
+# then we rely on tox to run the tests automatically, rather than repeat
+# ourselves with the testing process, and likely become out of sync
+script:
+  - tox

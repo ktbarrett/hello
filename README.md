@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ktbarrett/hello.svg?branch=master)](https://travis-ci.org/ktbarrett/hello)
+
 # Hello
 
 This project exists to act as an example project with a novel features set and structure.
