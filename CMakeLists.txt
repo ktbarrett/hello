@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 # define the CMake project
 project(hello
@@ -68,3 +68,23 @@ install(
         "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
         "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake")
+
+# will help us retrieve the pybind11 project
+include(FetchContent)
+
+# download pybind11 from github and import into our project
+FetchContent_Declare(pybind11
+    GIT_REPOSITORY https://github.com/pybind/pybind11.git
+    GIT_TAG v2.5.0)
+FetchContent_MakeAvailable(pybind11)
+
+# define a new python extension module using pybind11
+pybind11_add_module(_${PROJECT_NAME})
+
+# add sources to the pybind11 extension module
+target_sources(_${PROJECT_NAME}
+    PRIVATE ${PROJECT_SOURCE_DIR}/src/${PROJECT_NAME}/hello.cpp)
+
+# link the python extension module against the C++ library
+target_link_libraries(_${PROJECT_NAME}
+    PRIVATE ${PROJECT_NAME})
