@@ -69,22 +69,44 @@ install(
         "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake")
 
-# will help us retrieve the pybind11 project
-include(FetchContent)
+if(DEFINED SKBUILD)
 
-# download pybind11 from github and import into our project
-FetchContent_Declare(pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG v2.5.0)
-FetchContent_MakeAvailable(pybind11)
+    # prevent unused define warning
+    set(SKBUILD_IGNORE ${SKBUILD})
 
-# define a new python extension module using pybind11
-pybind11_add_module(_${PROJECT_NAME})
+    # will help us retrieve the pybind11 project
+    include(FetchContent)
 
-# add sources to the pybind11 extension module
-target_sources(_${PROJECT_NAME}
-    PRIVATE ${PROJECT_SOURCE_DIR}/src/${PROJECT_NAME}/hello.cpp)
+    # download pybind11 from github and import into our project
+    FetchContent_Declare(pybind11
+        GIT_REPOSITORY https://github.com/pybind/pybind11.git
+        GIT_TAG v2.5.0)
+    FetchContent_MakeAvailable(pybind11)
 
-# link the python extension module against the C++ library
-target_link_libraries(_${PROJECT_NAME}
-    PRIVATE ${PROJECT_NAME})
+    # define a new python extension module using pybind11
+    pybind11_add_module(_${PROJECT_NAME})
+
+    # add sources to the pybind11 extension module
+    target_sources(_${PROJECT_NAME}
+        PRIVATE ${PROJECT_SOURCE_DIR}/src/${PROJECT_NAME}/hello.cpp)
+
+    # link the python extension module against the C++ library
+    target_link_libraries(_${PROJECT_NAME}
+        PRIVATE ${PROJECT_NAME})
+
+    # install python extension module into Python package prefix so it gets installed by setuptools
+    # into the correct location in site-packages
+    install(TARGETS _${PROJECT_NAME}
+        LIBRARY DESTINATION ".")
+
+    # the library will be installed relative to the Python package prefix
+    # and the extension module will be installed into the root of the package
+    # so we set up a relative RPATH on the extension module to point to the C++ library
+    if(APPLE)
+        set(${PROJECT_NAME}_RPATH "@loader_path/${CMAKE_INSTALL_LIBDIR}")
+    else()
+        set(${PROJECT_NAME}_RPATH "$ORIGIN/${CMAKE_INSTALL_LIBDIR}")
+    endif()
+    set_target_properties(_${PROJECT_NAME} PROPERTIES INSTALL_RPATH ${${PROJECT_NAME}_RPATH})
+
+endif()
