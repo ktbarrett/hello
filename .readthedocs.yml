@@ -1,0 +1,12 @@
+version: 2
+
+python:
+  version: 3.7
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs  # this brings in the documentation build requirements
+
+sphinx:
+  configuration: docs/conf.py  # causes sphinx to run in docs/

@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/ktbarrett/hello.svg?branch=master)](https://travis-ci.org/ktbarrett/hello)
+[![Documentation Status](https://readthedocs.org/projects/hello-pybind11-2/badge/?version=latest)](https://hello-pybind11-2.readthedocs.io/en/latest/?badge=latest)
 
 # Hello
 

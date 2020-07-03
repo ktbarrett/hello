@@ -4,6 +4,8 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import subprocess
+
 
 # -- Project information -----------------------------------------------------
 
@@ -38,6 +40,16 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+
+
+# -- Run doxygen -------------------------------------------------------------
+
+# This is less than ideal
+# ReadTheDocs has no official support for doxygen as a part of its
+# documentation generation flow. To circumvent this we call doxygen from the
+# configuration file so it runs doxygen when sphinx is first invoked
+
+subprocess.run(['doxygen', 'Doxyfile'])
 
 
 # -- Breathe extension -------------------------------------------------------
