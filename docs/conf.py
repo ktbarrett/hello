@@ -22,6 +22,7 @@ release = '0.0.0'
 # ones.
 extensions = [
     "sphinx_rtd_theme",
+    "sphinx.ext.autodoc",
     "breathe"
 ]
 
