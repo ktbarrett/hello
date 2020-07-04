@@ -22,4 +22,11 @@ install:
 # then we rely on tox to run the tests automatically, rather than repeat
 # ourselves with the testing process, and likely become out of sync
 script:
-  - tox
+  - tox -e pytests
+
+# add a specific job to run the C++ example project
+jobs:
+  include:
+    - python: "3.8"
+      install: pip install tox
+      script: tox -e cpptests
